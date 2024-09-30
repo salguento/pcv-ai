@@ -1,28 +1,55 @@
 <template>
-    <div>
-    <div v-for="artwork in artworks" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div :artwork="artwork" :key="artwork._id">
+  <div
+    class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 p-4"
+  >
+    <div v-for="artwork in artworks" class="break-inside-avoid-column">
+      <div
+        :artwork="artwork"
+        :key="artwork._id"
+        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      >
         <a href="#">
-            <img class="rounded-t-lg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Mujer-Paraguaya-Con-Cantaro-por-Modesto-Gonzalez.jpg/400px-Mujer-Paraguaya-Con-Cantaro-por-Modesto-Gonzalez.jpg" alt="" />
+          <img
+            class="rounded-t-lg"
+            :src="artwork.preferred_file_url"
+            :alt="artwork.alt_text"
+            :title="artwork.alt_text"
+          />
         </a>
         <div class="p-5">
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-            </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-            <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Read more
-                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
+          <h5
+            class="mb-0 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+          >
+            {{ artwork.Title }}
+          </h5>
+          <p class="text-xl font-normal text-gray-700 dark:text-gray-400">
+            {{ artwork.artist }}
+          </p>
+          <p class="font-normal text-gray-700 dark:text-gray-400">
+            {{ artwork.date }}
+          </p>
+          <p class="font-normal text-gray-700 dark:text-gray-400">
+            {{ artwork.medium }}
+          </p>
+          <div class="flex justify-end text-lg mb-2">
+            <p class="font-normal text-gray-700 dark:text-gray-400">
+              <span v-if="artwork.Country == 'Argentina'">🇦🇷</span>
+              <span v-if="artwork.Country == 'Bolívia'">🇧🇴</span>
+              <span v-if="artwork.Country == 'Brasil'">🇧🇷</span>
+              <span v-if="artwork.Country == 'Colômbia'">🇨🇴</span>
+              <span v-if="artwork.Country == 'Chile'"> 🇨🇱 </span>
+              <span v-if="artwork.Country == 'Cuba'">🇨🇺</span>
+              {{ artwork.Country }}
+            </p>
+          </div>
+          <a :href="artwork.attribution_url">saiba mais</a>
         </div>
-        </div>
+      </div>
     </div>
-</div>
-  </template>
-  
-  <script setup>
+  </div>
+</template>
+
+<script setup>
 const props = defineProps({
   artworks: {
     type: Object,
@@ -30,4 +57,4 @@ const props = defineProps({
   },
 });
 const { artworks } = props;
-  </script>
+</script>
