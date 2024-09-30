@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    '@nuxt/content'
+    '@nuxt/content',
+    '@nuxt/image'
   ]
 })
