@@ -1,6 +1,13 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+  <div class="bg-white-100  dark:bg-slate-950">
+    <Navbar />
+    <Card />
   </div>
 </template>
+
+<script setup>
+  const content = await queryContent('/alt_text').findOne()
+  console.log(content.body[1])
+</script>
+
+
