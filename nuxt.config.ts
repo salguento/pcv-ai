@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@nuxt/content',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-headlessui'
   ],
   image: {
     // The screen sizes predefined by `@nuxt/image`:
