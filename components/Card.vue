@@ -1,48 +1,92 @@
 <template>
-  <div
-    class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 p-4"
-  >
-    <div v-for="artwork in artworks" class="break-inside-avoid-column">
-      <div
-        :artwork="artwork"
-        :key="artwork._id"
-        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-      >
-        <a href="#">
-          <img
-            class="rounded-t-lg"
-            :src="artwork.preferred_file_url"
-            :alt="artwork.alt_text"
-            :title="artwork.alt_text"
+  <div>
+    <div class="mb-12">
+      <form class="max-w-md mx-auto">
+        <label
+          for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >Search</label
+        >
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+          ></div>
+          <input
+            type="search"
+            v-model="input"
+            id="default-search"
+            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Buscar obras..."
           />
-        </a>
-        <div class="p-5">
-          <h5
-            class="mb-0 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+          <button
+            type="submit"
+            class="text-white absolute end-2.5 bottom-2.5 bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            {{ artwork.Title }}
-          </h5>
-          <p class="text-xl font-normal text-gray-700 dark:text-gray-400">
-            {{ artwork.artist }}
-          </p>
-          <p class="font-normal text-gray-700 dark:text-gray-400">
-            {{ artwork.date }}
-          </p>
-          <p class="font-normal text-gray-700 dark:text-gray-400">
-            {{ artwork.medium }}
-          </p>
-          <div class="flex justify-end text-lg mb-2">
-            <p class="font-normal text-gray-700 dark:text-gray-400">
-              <span v-if="artwork.Country == 'Argentina'">🇦🇷</span>
-              <span v-if="artwork.Country == 'Bolívia'">🇧🇴</span>
-              <span v-if="artwork.Country == 'Brasil'">🇧🇷</span>
-              <span v-if="artwork.Country == 'Colômbia'">🇨🇴</span>
-              <span v-if="artwork.Country == 'Chile'"> 🇨🇱 </span>
-              <span v-if="artwork.Country == 'Cuba'">🇨🇺</span>
-              {{ artwork.Country }}
-            </p>
+            Search
+          </button>
+        </div>
+      </form>
+    </div>
+    <div
+      class="item fruit"
+      v-for="artwork in filteredList()"
+      :key="artwork._id"
+    ></div>
+    <div class="item error" v-if="input && !filteredList().length">
+      <p class="text-xl text-center">Nenhum resultado encontrado!</p>
+    </div>
+    <div class="flex justify-center">
+      <div
+        class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl space-y-4"
+      >
+        <div
+          v-for="artwork in filteredList()"
+          :key="artwork._id"
+          class="break-after-all break-inside-avoid-column"
+        >
+          <div
+            v-if="artwork.alt_text"
+            class="max-w-sm bg-white border border-gray-200 rounded-2xl overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700"
+          >
+            <img
+              class="rounded-t-lg w-full"
+              :src="artwork.preferred_file_url"
+              :alt="artwork.alt_text"
+              :title="artwork.alt_text"
+            />
+            <div class="p-5">
+              <h5 class="mb-0 text-2xl font-bold text-gray-900 dark:text-white">
+                {{ artwork.Title }}
+              </h5>
+              <p class="text-xl font-normal text-gray-700 dark:text-gray-400">
+                {{ artwork.artist }}
+              </p>
+              <p class="font-normal text-gray-700 dark:text-gray-400">
+                {{ artwork.date }}
+              </p>
+              <p class="font-normal text-gray-700 dark:text-gray-400">
+                {{ artwork.medium }}
+              </p>
+              <div class="flex justify-end text-lg mb-2">
+                <p class="font-normal text-gray-700 dark:text-gray-400">
+                  <span v-if="artwork.Country == 'Argentina'">🇦🇷</span>
+                  <span v-if="artwork.Country == 'Bolívia'">🇧🇴</span>
+                  <span v-if="artwork.Country == 'Brasil'">🇧🇷</span>
+                  <span v-if="artwork.Country == 'Colômbia'">🇨🇴</span>
+                  <span v-if="artwork.Country == 'Chile'"> 🇨🇱 </span>
+                  <span v-if="artwork.Country == 'Cuba'">🇨🇺</span>
+                  {{ artwork.Country }}
+                </p>
+              </div>
+              <a
+                :href="artwork.attribution_url"
+                target="_blank"
+                class="cursor-pointer w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center ring-1 text-gray-500 ring-gray-500 dark:ring-gray-400 dark:text-gray-400 bg-transparent rounded-lg hover:bg-blue-500 focus:ring-4 focus:outline-none hover:ring-transparent focus:ring-blue-300 dark:bg-transparent dark:hover:bg-blue-700 dark:focus:ring-blue-800 hover:text-white"
+              >
+                Saiba mais
+              </a>
+            </div>
           </div>
-          <a :href="artwork.attribution_url">saiba mais</a>
         </div>
       </div>
     </div>
@@ -50,11 +94,25 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+let input = ref("");
 const props = defineProps({
   artworks: {
-    type: Object,
+    type: Array,
     required: true,
   },
 });
 const { artworks } = props;
+
+function filteredList() {
+  return artworks.filter(
+    (artwork) =>
+      (artwork.Title.toLowerCase().includes(input.value.toLowerCase()) ||
+        artwork.artist.toLowerCase().includes(input.value.toLowerCase()) ||
+        artwork.Country.toLowerCase().includes(input.value.toLowerCase())) &&
+      artwork.alt_text
+  );
+}
+
+console.log(artworks);
 </script>
