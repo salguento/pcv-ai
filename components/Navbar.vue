@@ -84,13 +84,8 @@
 </template>
 
 <script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import {
-  Bars3Icon,
-  XMarkIcon,
-  SunIcon,
-  MoonIcon,
-} from "@heroicons/vue/24/outline";
+import { Disclosure, DisclosurePanel } from "@headlessui/vue";
+import { SunIcon, MoonIcon } from "@heroicons/vue/24/outline";
 
 const colorMode = useColorMode();
 

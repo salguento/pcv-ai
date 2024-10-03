@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-12">
+    <div :class="input ? 'mb-4' : 'mb-[3.75rem]'">
       <form class="max-w-md mx-auto">
         <label
           for="default-search"
@@ -11,33 +11,38 @@
           <div
             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
           ></div>
+          <button
+            v-if="input"
+            @click="handleClear()"
+            type="button"
+            class="absolute end-2.5 bottom-2.5 rounded-full p-1 dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-black focus:outline-none focus:ring-2 dark:focus:ring-white focus:ring-black focus:ring-offset-2 dark:focus:ring-offset-gray-800 focus:ring-offset-gray-200"
+          >
+            <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
           <input
             type="search"
             v-model="input"
             id="default-search"
-            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Buscar obras..."
+            class="block w-full p-4 ps-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Encontre obras por título, autor, país ou data..."
           />
-          <button
-            type="submit"
-            class="text-white absolute end-2.5 bottom-2.5 bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button>
         </div>
       </form>
     </div>
-    <div
-      class="item fruit"
-      v-for="artwork in filteredList()"
-      :key="artwork._id"
-    ></div>
-    <div class="item error" v-if="input && !filteredList().length">
-      <p class="text-xl text-center">Nenhum resultado encontrado!</p>
+    <div class="" v-for="artwork in filteredList()" :key="artwork._id"></div>
+    <div class="h-full" v-if="input && !filteredList().length">
+      <p class="text-xl text-center text-black dark:text-white">
+        Nenhum resultado encontrado!
+      </p>
+    </div>
+    <div class="h-full" v-if="input && filteredList().length">
+      <p class="text-lg text-center text-black dark:text-white mb-4">
+        {{ filteredList().length }} obras encontradas
+      </p>
     </div>
     <div class="flex justify-center">
       <div
-        class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl space-y-4"
+        class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl space-y-4 mb-8"
       >
         <div
           v-for="artwork in filteredList()"
@@ -94,6 +99,8 @@
 </template>
 
 <script setup>
+import { XMarkIcon } from "@heroicons/vue/24/outline";
+
 import { ref } from "vue";
 let input = ref("");
 const props = defineProps({
@@ -109,10 +116,16 @@ function filteredList() {
     (artwork) =>
       (artwork.Title.toLowerCase().includes(input.value.toLowerCase()) ||
         artwork.artist.toLowerCase().includes(input.value.toLowerCase()) ||
+        artwork.date
+          .toString()
+          .toLowerCase()
+          .includes(input.value.toLowerCase()) ||
         artwork.Country.toLowerCase().includes(input.value.toLowerCase())) &&
       artwork.alt_text
   );
 }
 
-console.log(artworks);
+function handleClear() {
+  input.value = "";
+}
 </script>
